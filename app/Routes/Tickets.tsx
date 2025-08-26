@@ -8,9 +8,9 @@ import React, { useState, useEffect } from 'react';
 import { ScrollView, Linking } from 'react-native';
 import * as ImagePicker from "expo-image-picker";
 import { Button } from 'react-native-paper';
-import { styles } from './Estilos';
 import { Alert } from 'react-native';
 import userStore from '../../store';
+import { styles } from './Estilos';
 import axios from 'axios';
 
 const Tickets = () => {

@@ -370,13 +370,16 @@ const reportar = async () => {
     } else {
     try {
         getfolio();
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         generarFolio();
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         enviarDatos();
-        limpiarCampos();
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         openGmail();
         await new Promise((resolve) => setTimeout(resolve, 1000));
         sendWhatsApp();
         await new Promise((resolve) => setTimeout(resolve, 1000));
+        limpiarCampos();
         Alert.alert(`Aviso`,`Se ha registrado un reporte con el folio: ${folio}. El reporte ha sido enviado correctamente.`
         );
     } catch (error) {

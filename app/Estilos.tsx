@@ -2,12 +2,29 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     contLogin: {
-    height: "100%",
+    flex:1,
     width:"100%",
     justifyContent: "flex-end",
     },
-    containerLogo: {
+    contLogo: {
     alignItems: "center",
+    },
+    Logo: {
+    margin: '5%'
+    },
+    textoLogo: {
+    alignItems: "center",
+    },
+    titulo: {
+    textShadowColor: "blue",
+    textShadowRadius: 1,
+    marginTop: "5%",
+    fontSize: 35,
+    },
+    subTitulo: {
+    textShadowColor: "blue",
+    marginTop: "5%",
+    fontSize: 30,
     },
     containerImagen: {
     alignItems: "flex-end",
@@ -18,41 +35,44 @@ export const styles = StyleSheet.create({
     resizeMode: "stretch",
     width: "100%",
     },
-    logo: {
-    width: 150,
-    height: 150,
-    },
-    textoLogo: {
-    alignItems: "center",
-    },
-    titulo: {
-    fontSize: 35,
-    marginTop: "5%",
-    textShadowColor: "blue",
-    textShadowRadius: 1,
-    },
-    textos: {
-    textShadowRadius: 5,
-    textShadowColor:"#6e758b",
-    textAlign:"center",
-    fontSize: 30,
-    color:"white",
-    },
     textInputContainer: {
     position: "absolute",
     top: "25%",
-    left:0,
-    zIndex: 1,
     width:"100%",
     alignItems:"center"
+    },
+    textos: {
+    fontSize: 30,
+    color:"white",
     },
     textInput: {
     width: 250,
     height: 50,
     borderRadius: 20,
-    marginVertical:20,
+    marginVertical: 20,
     backgroundColor: 'white',
-    textAlign:'center',
+    textAlign: 'center',
+    },
+    passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: 250,
+    height: 50,
+    borderRadius: 20,
+    marginVertical: 20,
+    backgroundColor: 'white',
+    position: 'relative',
+    },
+    passwordInput: {
+    flex: 1,
+    height: '100%',
+    paddingHorizontal: 15,
+    textAlign: 'center',
+    },
+    eyeIcon: {
+    position: 'absolute',
+    right: 15,
+    padding: 10,
     },
     txtBoton: {
     color: "white",
@@ -72,10 +92,19 @@ export const styles = StyleSheet.create({
     },
     contForms: {
     backgroundColor:'#e8e8e8',
-    height: '100%',
+    flex:1,
     width:'100%',
+    paddingTop:30,
     paddingLeft: 15,
     paddingRight: 15,
+    },
+    scrollContain: {
+    paddingBottom: 100,
+    flexGrow: 1,  
+    },
+    scrollView: {
+    flex: 1,
+    width: '100%',
     },
     containerLine: {
     width:'100%',
@@ -225,10 +254,23 @@ export const styles = StyleSheet.create({
     borderRadius: 30,
     fontSize: 18,
     },
+    backgroundImage: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    top: 0,
+    left: 0,
+    zIndex: -1, // ← Detrás de todo
+    },
+    scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    padding: 20,
+    },
     imagenContainer: {
     maxWidth:'100%',
+    height:300,
     minWidth:300,
-    height: 300,
     marginVertical:'2%',
     resizeMode:"contain",
     borderRadius: 10,

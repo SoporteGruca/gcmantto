@@ -1,21 +1,18 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { FontAwesome, FontAwesome6, MaterialIcons } from "@expo/vector-icons";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { TextInput, Image, Alert, Linking } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { Text, View, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { Button } from "react-native-paper";
-import { styles } from "./Estilos";
+import { styles } from "../Estilos";
 import { Camera } from "expo-camera";
 import userStore from "../../store";
 import moment from "moment";
 import axios from "axios";
 
-const Tab = createBottomTabNavigator();
 const Reportes = () => {
-
 const [atencionData, setAtencionData] = useState([]);
 const [equipoData, setEquipoData] = useState([{}]);
 const [marcaData, setMarcaData] = useState([{}]);
@@ -274,13 +271,13 @@ const handleState3 = async (numMaquina: any) => {
         let modeloArray : any = [];
         let numMaqArray : any = [];
         for (var i = 0; i < datos.length; i++) {
-        maqArray.push({
-            value: datos[i].ClasMaq,
-            label: datos[i].ClasMaq,
-        });
         nomArray.push({
             value: datos[i].NombreMaq,
             label: datos[i].NombreMaq,
+        });
+        maqArray.push({
+            value: datos[i].ClasMaq,
+            label: datos[i].ClasMaq,
         });
         ubiArray.push({
             value: datos[i].UbicaMaq,
@@ -289,7 +286,7 @@ const handleState3 = async (numMaquina: any) => {
         encArray.push({
             value: datos[i].Encargado,
             label: datos[i].Encargado,
-        });  
+        });
         idArray.push({
             value: datos[i].IdMaquina,
             label: datos[i].IdMaquina,
@@ -307,11 +304,11 @@ const handleState3 = async (numMaquina: any) => {
             label: datos[i].NumMaq,
         });
         }
-        setEquipo(maqArray[0].value);
         setMarca(nomArray[0].value);
+        setEquipo(maqArray[0].value);
         setUbi(ubiArray[0].value);
-        setId(idArray[0].value);
         setEncargado(encArray[0].value);
+        setId(idArray[0].value);
         setDepto(deptoArray[0].value)
         setModelo(modeloArray[0].value)
         setNum(numMaqArray[0].value)
@@ -370,13 +367,16 @@ const reportar = async () => {
     } else {
     try {
         getfolio();
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         generarFolio();
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         enviarDatos();
-        limpiarCampos();
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         openGmail();
         await new Promise((resolve) => setTimeout(resolve, 1000));
         sendWhatsApp();
         await new Promise((resolve) => setTimeout(resolve, 1000));
+        limpiarCampos();
         Alert.alert(`Aviso`,`Se ha registrado un reporte con el folio: ${folio}. El reporte ha sido enviado correctamente.`
         );
     } catch (error) {
@@ -445,218 +445,223 @@ const sendWhatsApp = () => {
     return Linking.openURL(link);
     });
 };
+
 return (
     <View style={styles.contForms}>
-    <ScrollView>
-        <View style={styles.containerLineInside}>
-        <Text style={styles.textTitle}>¡Bienvenido!</Text>
-        <Text style={styles.textSubTitle}>{fullName}</Text>
-        </View>
-        <Text style={styles.text}>Numero de maquina</Text>
-        <Dropdown
-        style={[styles.dropdown]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={numData}
-        search
-        maxHeight={200}
-        labelField="label"
-        valueField="value"
-        placeholder={"Numero de maquina"}
-        searchPlaceholder="Buscar..."
-        value={num}
-        onChange={(item: any) => {
-            setNum(item.value);
-            handleState3(item.value);
-        }}
-        />
-        <Text style={styles.text}>Maquina a reportar</Text>
-        <Dropdown
-        style={[styles.dropdown]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={equipoData}
-        search
-        maxHeight={200}
-        labelField="label"
-        valueField="value"
-        placeholder={"Selecciona una maquina"}
-        searchPlaceholder="Buscar..."
-        value={equipo}
-        renderLeftIcon={() => (
-            <MaterialCommunityIcons name="tools" size={24} color="red" />
-        )}
-        onChange={(item: any) => {
-            setEquipo(item.value);
-            handleState(item.value);
-            getfolio();
-        }}
-        />
-        <Text style={styles.text}>Numero y Modelo</Text>
-        <Dropdown
-        style={[styles.dropdown]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={marcaData}
-        search
-        maxHeight={200}
-        labelField="label"
-        valueField="value"
-        placeholder={"Seleccione el modelo"}
-        searchPlaceholder="Buscar..."
-        autoScroll={false}
-        value={marca}
-        renderLeftIcon={() => (
-            <FontAwesome name="gears" size={24} color="black" />
-        )}
-        onChange={(item: any) => {
-            setMarca(item.value);
-            handleState2(item.value);
-            getfolio();
-        }}
-        />
-        <Text style={styles.text}>Ubicación o Area</Text>
-        <Dropdown
-        style={[styles.dropdown]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={ubiData}
-        search
-        maxHeight={200}
-        labelField="label"
-        valueField="value"
-        placeholder={"Seleccione la ubicacion"}
-        searchPlaceholder="Buscar..."
-        autoScroll={false}
-        value={ubi}
-        renderLeftIcon={() => (
-            <MaterialIcons name="location-pin" size={24} color="black" />
-        )}
-        onChange={(item: any) => {
-            setUbi(item.value);
-            getfolio();
-        }}
-        />
-        <Text style={styles.text}>Operador</Text>
-        <Dropdown
-        style={[styles.dropdown]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={encData}
-        search
-        maxHeight={200}
-        labelField="label"
-        valueField="value"
-        placeholder={"Seleccione al operador..."}
-        searchPlaceholder="Buscar..."
-        autoScroll={false}
-        value={encargado}
-        renderLeftIcon={() => (
-            <FontAwesome6 name="user-gear" size={24} color="black" />
-        )}
-        onChange={(item: any) => {
-            setEncargado(item.value);
-            getfolio();
-        }}
-        />
-        <Text style={styles.text}>Tipo Falla</Text>
-        <Dropdown
-        style={[styles.dropdown]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={fallaData}
-        search
-        maxHeight={200}
-        labelField="label"
-        valueField="value"
-        placeholder={"Seleccione la falla..."}
-        searchPlaceholder="Buscar..."
-        autoScroll={false}
-        value={falla}
-        renderLeftIcon={() => (
-            <MaterialIcons name="sms-failed" size={24} color="black" />
-        )}
-        onChange={(item: any) => {
-            setFalla(item.value);
-            getfolio();
-        }}
-        />
-        <View style={styles.containerLine}>
-        <View style={styles.containerLineInside}>
-            <Text style={styles.text}>ID maquina</Text>
-            <TextInput
-            placeholder="Numero de maquina"
-            style={styles.boxsmall}
-            onChangeText={setId}
-            value={id}
-            editable={false}
+        <ScrollView contentContainerStyle={styles.scrollContain}
+            style={styles.scrollView}>
+            <View style={styles.containerLineInside}>
+            <Text style={styles.textTitle}>¡Bienvenido!</Text>
+            <Text style={styles.textSubTitle}>{fullName}</Text>
+            </View>
+            <Text style={styles.text}>Numero de maquina</Text>
+            <Dropdown
+            style={[styles.dropdown]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={numData}
+            search
+            maxHeight={400}
+            labelField="label"
+            valueField="value"
+            placeholder={"Numero de maquina"}
+            searchPlaceholder="Buscar..."
+            value={num}
+            onChange={(item: any) => {
+                setNum(item.value);
+                handleState3(item.value);
+            }}
             />
-        </View>
-        </View>
-        <View style={styles.containerLineInside}>
-        <Text style={styles.text}>Descripción de la falla </Text>
-        <TextInput
-            multiline
-            numberOfLines={6}
-            placeholder="Descrpción de la falla "
-            style={styles.boxlarge}
-            onChangeText={setDescripcion}
-            value={descripcion}
-        ></TextInput>
-        </View>
+            <Text style={styles.text}>Maquina a reportar</Text>
+            <Dropdown
+            style={[styles.dropdown]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={equipoData}
+            search
+            maxHeight={400}
+            labelField="label"
+            valueField="value"
+            placeholder={"Selecciona una maquina"}
+            searchPlaceholder="Buscar..."
+            value={equipo}
+            renderLeftIcon={() => (
+                <MaterialCommunityIcons name="tools" size={24} color="red" />
+            )}
+            onChange={(item: any) => {
+                setEquipo(item.value);
+                handleState(item.value);
+                getfolio();
+            }}
+            />
+            <Text style={styles.text}>Numero y Modelo</Text>
+            <Dropdown
+            style={[styles.dropdown]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={marcaData}
+            search
+            maxHeight={400}
+            labelField="label"
+            valueField="value"
+            placeholder={"Seleccione el modelo"}
+            searchPlaceholder="Buscar..."
+            autoScroll={false}
+            value={marca}
+            renderLeftIcon={() => (
+                <FontAwesome name="gears" size={24} color="black" />
+            )}
+            onChange={(item: any) => {
+                setMarca(item.value);
+                handleState2(item.value);
+                getfolio();
+            }}
+            />
+            <Text style={styles.text}>Ubicación o Area</Text>
+            <Dropdown
+            style={[styles.dropdown]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={ubiData}
+            search
+            maxHeight={400}
+            labelField="label"
+            valueField="value"
+            placeholder={"Seleccione la ubicacion"}
+            searchPlaceholder="Buscar..."
+            autoScroll={false}
+            value={ubi}
+            renderLeftIcon={() => (
+                <MaterialIcons name="location-pin" size={24} color="black" />
+            )}
+            onChange={(item: any) => {
+                setUbi(item.value);
+                getfolio();
+            }}
+            />
+            <Text style={styles.text}>Operador</Text>
+            <Dropdown
+            style={[styles.dropdown]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={encData}
+            search
+            maxHeight={400}
+            labelField="label"
+            valueField="value"
+            placeholder={"Seleccione al operador..."}
+            searchPlaceholder="Buscar..."
+            autoScroll={false}
+            value={encargado}
+            renderLeftIcon={() => (
+                <FontAwesome6 name="user-gear" size={24} color="black" />
+            )}
+            onChange={(item: any) => {
+                setEncargado(item.value);
+                getfolio();
+            }}
+            />
+            <Text style={styles.text}>Tipo Falla</Text>
+            <Dropdown
+            style={[styles.dropdown]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={fallaData}
+            search
+            maxHeight={400}
+            labelField="label"
+            valueField="value"
+            placeholder={"Seleccione la falla..."}
+            searchPlaceholder="Buscar..."
+            autoScroll={false}
+            value={falla}
+            renderLeftIcon={() => (
+                <MaterialIcons name="sms-failed" size={24} color="black" />
+            )}
+            onChange={(item: any) => {
+                setFalla(item.value);
+                getfolio();
+            }}
+            />
+            <View style={styles.containerLine}>
+                <View style={styles.containerLineInside}>
+                    <Text style={styles.text}>ID maquina</Text>
+                    <TextInput
+                    placeholder="Numero de maquina"
+                    style={styles.boxsmall}
+                    onChangeText={setId}
+                    value={id}
+                    editable={false}
+                    />
+                </View>
+            </View>
 
-        <View>
-        {image && <Image source={{ uri: image }} />}
-        <Image style={styles.imagenContainer} source={{ uri: image }}></Image>
-        </View>
+            <View style={styles.containerLineInside}>
+                <Text style={styles.text}>Descripción de la falla </Text>
+                <TextInput
+                    multiline
+                    numberOfLines={6}
+                    placeholder="Descrpción de la falla "
+                    style={styles.boxlarge}
+                    onChangeText={setDescripcion}
+                    value={descripcion}
+                ></TextInput>
+            </View>
 
-        <View style={styles.containerButton}>
-        <View style={styles.LineButtonBorrar}>
-            <Button
-            onPress={deletePicture}
-            icon="delete"
-            mode="contained"
-            buttonColor="#b01212"
-            >
-            Borrar
-            </Button>
-        </View>
-        <View style={styles.LineButtonTomarFoto}>
-            <Button
-            onPress={takePicture}
-            icon="camera"
-            mode="contained"
-            buttonColor="#374175"
-            >
-            Tomar foto
-            </Button>
-        </View>
-        </View>
-        
-        <View style={styles.containerLine}>
-        <Button
-            onPress={reportar}
-            icon="mail"
-            mode="contained"
-            buttonColor="#374175"
-        >
-            Reportar
-        </Button>
-        </View>
+            <View>
+            {image && <Image source={{ uri: image }} />}
+            <Image style={styles.imagenContainer} source={{ uri: image }}></Image>
+            </View>
+            
+            <View style={styles.containerButton}>
 
-    </ScrollView>
+                <View style={styles.LineButtonBorrar}>
+                    <Button
+                    onPress={deletePicture}
+                    icon="delete"
+                    mode="contained"
+                    buttonColor="#b01212"
+                    >
+                    Borrar
+                    </Button>
+                </View>
+
+                <View style={styles.LineButtonTomarFoto}>
+                    <Button
+                    onPress={takePicture}
+                    icon="camera"
+                    mode="contained"
+                    buttonColor="#374175"
+                    >
+                    Tomar foto
+                    </Button>
+                </View>
+
+            </View>
+            
+            <View style={styles.containerLine}>
+                <Button
+                    onPress={reportar}
+                    icon="mail"
+                    mode="contained"
+                    buttonColor="#374175"
+                >
+                    Reportar
+                </Button>
+            </View>
+        </ScrollView>
     </View>
 );
 };

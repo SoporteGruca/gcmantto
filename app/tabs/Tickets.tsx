@@ -1,20 +1,19 @@
-import { View, Text, TextInput, Image }  from 'react-native';
+import { View, Text, TextInput, Image } from 'react-native';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Dropdown } from 'react-native-element-dropdown';
-import { useNavigation } from '@react-navigation/native';
 import moment from 'moment/min/moment-with-locales';
 import React, { useState, useEffect } from 'react';
 import { ScrollView, Linking } from 'react-native';
 import * as ImagePicker from "expo-image-picker";
 import { Button } from 'react-native-paper';
-import { styles } from './Estilos';
 import { Alert } from 'react-native';
 import userStore from '../../store';
+import { styles } from '../Estilos';
 import axios from 'axios';
+import { router } from 'expo-router';
 
 const Tickets = () => {
-const navigation : any = useNavigation();
 var moment = require('moment/min/moment-with-locales')
 moment.locale('es');
 //Datas
@@ -126,7 +125,7 @@ const refrescar  = () => {
 
 const mensajes = async () => {
     if ( noTicket != null ) {
-    await navigation.navigate("Mensajes");
+    router.push('/Mensajes');
     } else {
     Alert.alert("Aviso","Debes seleccionar un ticket antes de poder ver los mensajes");
     }
@@ -138,7 +137,7 @@ const handleStateAtencionChange = (item : any) => {
 }
 
 const validarUsuario = async (atencion?: any) => {
-    await axios.get('http://192.168.0.46:4000/verifica').then(function (response) {
+    await axios.get('http://192.168.0.46:4100/verifica').then(function (response) {
     cuenta = response.data.map((item : any) => ( {
         nombre: item['Usuario'],
         email: item['correo'],
@@ -227,7 +226,7 @@ const validarUsuario = async (atencion?: any) => {
 }
 const validarAgente  = async ( folio : string) => {
     try {
-        const response = await axios.get('http://192.168.0.46:4000/valida/' + `${folio}`);
+        const response = await axios.get('http://192.168.0.46:4100/valida/' + `${folio}`);
         const agente = response.data[0]['Atencion de Ticket'];
         let ag = await getCorreoAgente(agente);
     } catch (error) {
@@ -240,7 +239,7 @@ const getCorreoAgente  = async ( agente : string) => {
     try {
         console.log(agente);
         
-        const response = await axios.get('http://192.168.0.46:4000/correoA/' + `${agente}`);
+        const response = await axios.get('http://192.168.0.46:4100/correoA/' + `${agente}`);
         console.log(response.data[0]['correo']);
         
         userStore.CAgente = response.data[0]["correo"];
@@ -256,7 +255,7 @@ const handleState =  async (folioDB : string) => {
     setFolio(folioDB);
     loadImage(folioDB);
     loadImageEvi(folioDB);
-    await axios.get('http://192.168.0.46:4000/maquinasef/' + `${folioDB}`).then(function (response) {
+    await axios.get('http://192.168.0.46:4100/maquinasef/' + `${folioDB}`).then(function (response) {
     const datos = response.data;
     let numMaquina = datos[0]['ID']
     userStore.setTicket(folioDB);
@@ -330,7 +329,7 @@ const handleState =  async (folioDB : string) => {
     });
 };
 const loadImage =  async ( folio : string ) => {
-    await fetch('http://192.168.0.46:4000/idPicture/' + `${folio}`, {
+    await fetch('http://192.168.0.46:4100/idPicture/' + `${folio}`, {
     method: 'GET',
     headers: {
         'Content-Type': 'image/jpeg'
@@ -348,7 +347,7 @@ const loadImage =  async ( folio : string ) => {
     });
 }
 const loadImageEvi =  async ( folio : string ) => {
-    await fetch('http://192.168.0.46:4000/idPicEvi/' + `${folio}`, {
+    await fetch('http://192.168.0.46:4100/idPicEvi/' + `${folio}`, {
     method: 'GET',
     headers: {
         'Content-Type': 'image/jpeg'
@@ -366,7 +365,7 @@ const loadImageEvi =  async ( folio : string ) => {
     });
 }
 const getFolios  = async () => {
-    await axios.get('http://192.168.0.46:4000/maqticket').then(function(response) {
+    await axios.get('http://192.168.0.46:4100/maqticket').then(function(response) {
     var count = Object.keys(response.data).length;
     let Array: any = [];
     for (var i = 0; i < count; i++) {
@@ -393,9 +392,9 @@ const getFolios  = async () => {
     });
 }
 const getcorreo = async ( folio : string ) => {
-    await axios.get('http://192.168.0.46:4000/correof/' + `${folio}`).then(function(response) {
+    await axios.get('http://192.168.0.46:4100/correof/' + `${folio}`).then(function(response) {
     const reporto = response.data[0]['Usuario que Reporta'];
-    axios.get('http://192.168.0.46:4000/correou/' + `${reporto}`).then(function(response) {
+    axios.get('http://192.168.0.46:4100/correou/' + `${reporto}`).then(function(response) {
         userStore.CEncargado = response.data[0]["correo"];
     }).catch(function (error) {
         console.log(error);
@@ -516,7 +515,7 @@ const jpgBase64 = async () => {
             name: "imagen.jpg",
         });
     const response = await axios.post(
-        'http://192.168.0.46:4000/maquinasfImage/' + `${noTicket}`,
+        'http://192.168.0.46:4100/maquinasfImage/' + `${noTicket}`,
         formData,
         {
         headers: {
@@ -534,7 +533,7 @@ const enviarDatos = async () => {
             await jpgBase64();
         }
         const response = await axios.put(
-            'http://192.168.0.46:4000/maquinasf/' + `${noTicket}`, {
+            'http://192.168.0.46:4100/maquinasf/' + `${noTicket}`, {
             atendio: atencion,
             fechaCierre: fechaCierre,
             horaCierre: horaCierre,
@@ -557,7 +556,7 @@ const enviarDatos = async () => {
             }
         );
         openGmail();
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        await new Promise(resolve => setTimeout(resolve, 1000));
         sendWhatsApp();
         getFolios();
         limpiarcampos();

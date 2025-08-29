@@ -1,8 +1,7 @@
-import { View, Text, TextInput, Image }  from 'react-native';
+import { View, Text, TextInput, Image } from 'react-native';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Dropdown } from 'react-native-element-dropdown';
-import { useNavigation } from '@react-navigation/native';
 import moment from 'moment/min/moment-with-locales';
 import React, { useState, useEffect } from 'react';
 import { ScrollView, Linking } from 'react-native';
@@ -10,11 +9,11 @@ import * as ImagePicker from "expo-image-picker";
 import { Button } from 'react-native-paper';
 import { Alert } from 'react-native';
 import userStore from '../../store';
-import { styles } from './Estilos';
+import { styles } from '../Estilos';
 import axios from 'axios';
+import { router } from 'expo-router';
 
 const Tickets = () => {
-const navigation : any = useNavigation();
 var moment = require('moment/min/moment-with-locales')
 moment.locale('es');
 //Datas
@@ -126,7 +125,7 @@ const refrescar  = () => {
 
 const mensajes = async () => {
     if ( noTicket != null ) {
-    await navigation.navigate("Mensajes");
+    router.push('/Mensajes');
     } else {
     Alert.alert("Aviso","Debes seleccionar un ticket antes de poder ver los mensajes");
     }

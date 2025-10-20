@@ -12,10 +12,10 @@ import { Ionicons } from '@expo/vector-icons';
 
 const Login = ({}) => {
     const [loading, setLoading] = useState(false);
-    // const [Usuario, setUsuario] = useState('');
-    // const [contrasena, setContrasena] = useState('');
-    const [Usuario, setUsuario] = useState('Oscar');
-    const [contrasena, setContrasena] = useState('1234');
+    const [Usuario, setUsuario] = useState('');
+    const [contrasena, setContrasena] = useState('');
+    // const [Usuario, setUsuario] = useState('Oscar');
+    // const [contrasena, setContrasena] = useState('1234');
     const [showPassword, setShowPassword] = useState(false);
 
     const togglePasswordVisibility = () => {
